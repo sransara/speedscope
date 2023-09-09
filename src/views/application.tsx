@@ -357,6 +357,19 @@ export class Application extends StatelessComponent<ApplicationProps> {
     }
   }
 
+  onWindowMessage = (ev: MessageEvent) => {
+    if (ev.data.type === 'load') {
+      this.loadProfile(async () => {
+        const {filename, docbytes} = ev.data
+        const docbuffer = docbytes.buffer.slice(
+          docbytes.byteOffset,
+          docbytes.byteLength + docbytes.byteOffset,
+        )
+        return await importProfilesFromArrayBuffer(filename, docbuffer)
+      })
+    }
+  }
+
   private saveFile = () => {
     if (this.props.profileGroup) {
       const {name, indexToView, profiles} = this.props.profileGroup
@@ -405,6 +418,7 @@ export class Application extends StatelessComponent<ApplicationProps> {
   componentDidMount() {
     window.addEventListener('keydown', this.onWindowKeyDown)
     window.addEventListener('keypress', this.onWindowKeyPress)
+    window.addEventListener('message', this.onWindowMessage)
     document.addEventListener('paste', this.onDocumentPaste)
     this.maybeLoadHashParamProfile()
   }
@@ -416,7 +430,7 @@ export class Application extends StatelessComponent<ApplicationProps> {
   }
 
   async maybeLoadHashParamProfile() {
-    const {profileURL} = this.props.hashParams;
+    const {profileURL} = this.props.hashParams
     if (profileURL) {
       if (!canUseXHR) {
         alert(
