@@ -1,4 +1,15 @@
+function overrideConsoleLogging(vscode) {
+  const console = window.console
+  const methods = ['log', 'info', 'warn', 'error']
+  for (const method of methods) {
+    console[method] = (...args) => {
+      vscode.postMessage({type: `console`, method, args})
+    }
+  }
+}
+
 ;(function () {
   const vscode = acquireVsCodeApi()
+  overrideConsoleLogging(vscode)
   vscode.postMessage({type: 'ready'})
 })()
