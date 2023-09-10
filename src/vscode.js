@@ -10,6 +10,7 @@ function overrideConsoleLogging(vscode) {
 
 ;(function () {
   const vscode = acquireVsCodeApi()
+  window.vscode = vscode
   overrideConsoleLogging(vscode)
   vscode.postMessage({type: 'ready'})
 })()

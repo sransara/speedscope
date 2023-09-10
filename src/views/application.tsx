@@ -357,9 +357,9 @@ export class Application extends StatelessComponent<ApplicationProps> {
     }
   }
 
-  onWindowMessage = (ev: MessageEvent) => {
+  onWindowMessage = async (ev: MessageEvent) => {
     if (ev.data.type === 'load') {
-      this.loadProfile(async () => {
+      await this.loadProfile(async () => {
         const {filename, docbytes} = ev.data
         const docbuffer = docbytes.buffer.slice(
           docbytes.byteOffset,
@@ -367,6 +367,7 @@ export class Application extends StatelessComponent<ApplicationProps> {
         )
         return await importProfilesFromArrayBuffer(filename, docbuffer)
       })
+      ;(window as any).vscode.postMessage({type: 'loaded'})
     }
   }
 
