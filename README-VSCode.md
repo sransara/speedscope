@@ -10,3 +10,7 @@ To build run:
 npm ci
 scripts/build-for-vscode.sh
 ```
+
+## More
+
+Read more at https://github.com/sransara/speedscope-in-vscode/blob/main/DEVELOPMENT.md

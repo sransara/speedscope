@@ -3,7 +3,7 @@ function overrideConsoleLogging(vscode) {
   const methods = ['log', 'info', 'warn', 'error']
   for (const method of methods) {
     console[method] = (...args) => {
-      vscode.postMessage({type: `console`, method, args})
+      vscode.postMessage({clientCommand: `console`, method, args})
     }
   }
 }
@@ -12,5 +12,5 @@ function overrideConsoleLogging(vscode) {
   const vscode = acquireVsCodeApi()
   window.vscode = vscode
   overrideConsoleLogging(vscode)
-  vscode.postMessage({type: 'ready'})
+  vscode.postMessage({clientEvent: 'ready'})
 })()

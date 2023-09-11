@@ -358,7 +358,7 @@ export class Application extends StatelessComponent<ApplicationProps> {
   }
 
   onWindowMessage = async (ev: MessageEvent) => {
-    if (ev.data.type === 'load') {
+    if (ev.data.serverCommand === 'openFile') {
       await this.loadProfile(async () => {
         const {filename, docbytes} = ev.data
         const docbuffer = docbytes.buffer.slice(
