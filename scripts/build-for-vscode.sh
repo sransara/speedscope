@@ -9,6 +9,9 @@ if [ ! -d "node_modules" ]; then
   npm ci
 fi
 
+# Remove any old files
+rm -rf dist
+
 # Exact string `vscode-webview-url`
 # will be used by the VSCode extension to do a search and replace
-npx parcel build assets/index.html --public-url "./vscode-webview-url"
+npx parcel build assets/index.html --out-dir ./dist  --public-url "./vscode-webview-url"
