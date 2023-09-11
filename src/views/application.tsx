@@ -367,7 +367,11 @@ export class Application extends StatelessComponent<ApplicationProps> {
         )
         return await importProfilesFromArrayBuffer(filename, docbuffer)
       })
-      ;(window as any).vscode.postMessage({type: 'loaded'})
+      if (this.props.error) {
+        ;(window as any).vscode.postMessage({clientEvent: 'error'})
+      } else {
+        ;(window as any).vscode.postMessage({clientEvent: 'opennedFile'})
+      }
     }
   }
 
@@ -549,7 +553,7 @@ export class Application extends StatelessComponent<ApplicationProps> {
     return (
       <div className={css(style.error)}>
         <div>😿 Something went wrong.</div>
-        <div>Check the JS console for more details.</div>
+        <div>Check the OUTPUT logs for more details.</div>
       </div>
     )
   }
