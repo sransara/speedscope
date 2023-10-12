@@ -239,10 +239,7 @@ export class FlamechartPanZoomView extends Component<FlamechartPanZoomViewProps,
           )
 
           if (match) {
-            const rangesToHighlightInTrimmedText = remapRangesToTrimmedText(
-              trimmedText,
-              match
-            )
+            const rangesToHighlightInTrimmedText = remapRangesToTrimmedText(trimmedText, match)
 
             // Once we have the character ranges to highlight, we need to
             // actually do the highlighting.
@@ -607,6 +604,15 @@ export class FlamechartPanZoomView extends Component<FlamechartPanZoomViewProps,
     if (this.hoveredLabel) {
       this.props.onNodeSelect(this.hoveredLabel.node)
       this.renderCanvas()
+      if (ev.ctrlKey) {
+        const frame = this.hoveredLabel.node.frame
+        if (frame.file) {
+          ;(window as any).vscode.postMessage({
+            clientCommand: `openFile`,
+            args: {file: frame.file, line: frame.line, col: frame.col},
+          })
+        }
+      }
     } else {
       this.props.onNodeSelect(null)
     }
