@@ -76,7 +76,25 @@ function StackTraceView(props: StackTraceViewProps) {
           pos += `:${frame.col}`
         }
       }
-      row.push(<span className={css(style.stackFileLine)}> ({pos})</span>)
+      row.push(
+        <span className={css(style.stackFileLine)}>
+          {' '}
+          (
+          <a
+            href={`file:///${pos}`}
+            onClick={e => {
+              e.preventDefault()
+              ;(window as any).vscode.postMessage({
+                clientCommand: `openFile`,
+                args: {file: frame.file, line: frame.line, col: frame.col},
+              })
+            }}
+          >
+            {pos}
+          </a>
+          )
+        </span>,
+      )
     }
     rows.push(<div className={css(style.stackLine)}>{row}</div>)
   }
