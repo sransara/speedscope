@@ -604,7 +604,7 @@ export class FlamechartPanZoomView extends Component<FlamechartPanZoomViewProps,
     if (this.hoveredLabel) {
       this.props.onNodeSelect(this.hoveredLabel.node)
       this.renderCanvas()
-      if (ev.ctrlKey) {
+      if (ev.ctrlKey || ev.metaKey) {
         const frame = this.hoveredLabel.node.frame
         if (frame.file) {
           ;(window as any).vscode.postMessage({
