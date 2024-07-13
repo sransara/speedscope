@@ -47,6 +47,10 @@ test('importTraceEvents bad E events', async () => {
   await checkProfileSnapshot('./sample/profiles/trace-event/too-many-end-events.json')
 })
 
+test('importTraceEvents different number of start and end calls to same function at same timestamp', async () => {
+  await checkProfileSnapshot('./sample/profiles/trace-event/simultaneous-anonymous-calls.json')
+})
+
 test('importTraceEvents event re-ordering', async () => {
   await checkProfileSnapshot('./sample/profiles/trace-event/must-retain-original-order.json')
 })
@@ -117,4 +121,20 @@ test('importTraceEvents invalid x nesting', async () => {
 
 test('importTraceEvents event reordering name match', async () => {
   await checkProfileSnapshot('./sample/profiles/trace-event/event-reordering-name-match.json')
+})
+
+test('importTraceEvents simple hermes profile', async () => {
+  await checkProfileSnapshot('./sample/profiles/trace-event/simple-hermes.json')
+})
+
+test('importTraceEvents hermes profile with multiple frames', async () => {
+  await checkProfileSnapshot('./sample/profiles/trace-event/simple-hermes.json')
+})
+
+test('importTraceEvents simple profile with samples', async () => {
+  await checkProfileSnapshot('./sample/profiles/trace-event/simple-with-samples.json')
+})
+
+test('importTraceEvents multi-thread profile with samples', async () => {
+  await checkProfileSnapshot('./sample/profiles/trace-event/multi-thread-with-samples.json')
 })

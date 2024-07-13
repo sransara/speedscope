@@ -1,6 +1,5 @@
 import {h} from 'preact'
 import {StyleSheet, css} from 'aphrodite'
-import {FileSystemDirectoryEntry} from '../import/file-system-entry'
 
 import {ProfileGroup, SymbolRemapper} from '../lib/profile'
 import {FontFamily, FontSize, Duration} from './style'
@@ -59,6 +58,10 @@ async function importFromFileSystemDirectoryEntry(entry: FileSystemDirectoryEntr
 
 declare function require(x: string): any
 const exampleProfileURL = require('../../sample/profiles/stackcollapse/perf-vertx-stacks-01-collapsed-all.txt')
+
+function isFileSystemDirectoryEntry(entry: FileSystemEntry): entry is FileSystemDirectoryEntry {
+  return entry != null && entry.isDirectory
+}
 
 interface GLCanvasProps {
   canvasContext: CanvasContext | null
@@ -165,6 +168,7 @@ export type ApplicationProps = {
 
 export class Application extends StatelessComponent<ApplicationProps> {
   private async loadProfile(loader: () => Promise<ProfileGroup | null>) {
+    this.props.setError(false)
     this.props.setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 0))
 
@@ -306,13 +310,18 @@ export class Application extends StatelessComponent<ApplicationProps> {
 
     const firstItem = ev.dataTransfer.items[0]
     if ('webkitGetAsEntry' in firstItem) {
-      const webkitEntry: FileSystemDirectoryEntry = firstItem.webkitGetAsEntry()
+      const webkitEntry: FileSystemEntry | null = firstItem.webkitGetAsEntry()
 
       // Instrument.app file format is actually a directory.
-      if (webkitEntry.isDirectory && webkitEntry.name.endsWith('.trace')) {
+      if (
+        webkitEntry &&
+        isFileSystemDirectoryEntry(webkitEntry) &&
+        webkitEntry.name.endsWith('.trace')
+      ) {
         console.log('Importing as Instruments.app .trace file')
+        const webkitDirectoryEntry: FileSystemDirectoryEntry = webkitEntry
         this.loadProfile(async () => {
-          return await importFromFileSystemDirectoryEntry(webkitEntry)
+          return await importFromFileSystemDirectoryEntry(webkitDirectoryEntry)
         })
         return
       }
