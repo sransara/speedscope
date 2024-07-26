@@ -617,8 +617,8 @@ const getStyle = withTheme(theme =>
       height: '100%',
     },
     loading: {
-      height: 3,
-      marginBottom: -3,
+      height: 10,
+      marginBottom: -10,
       background: theme.selectionPrimaryColor,
       transformOrigin: '0% 50%',
       animationName: [
